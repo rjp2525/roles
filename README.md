@@ -1,6 +1,6 @@
 # Roles And Permissions For Laravel 5
 
-Powerful package for handling roles and permissions in Laravel 5 (5.1 and also 5.0).
+Powerful package for handling roles and permissions in Laravel 5.2+.
 
 - [Installation](#installation)
     - [Composer](#composer)
@@ -32,13 +32,7 @@ This package is very easy to set up. There are only couple of steps.
 Pull this package in through Composer (file `composer.json`).
 
 ```js
-{
-    "require": {
-        "php": ">=5.5.9",
-        "laravel/framework": "5.1.*",
-        "bican/roles": "2.1.*"
-    }
-}
+# composer require rjp2525/roles
 ```
 
 > If you are still using Laravel 5.0, you must pull in version `1.7.*`.
@@ -53,18 +47,18 @@ Add the package to your application service providers in `config/app.php` file.
 
 ```php
 'providers' => [
-    
+
     /*
      * Laravel Framework Service Providers...
      */
     Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
     Illuminate\Auth\AuthServiceProvider::class,
     ...
-    
+
     /**
      * Third Party Service Providers...
      */
-    Bican\Roles\RolesServiceProvider::class,
+    Reno\Roles\RolesServiceProvider::class,
 
 ],
 ```
@@ -73,8 +67,8 @@ Add the package to your application service providers in `config/app.php` file.
 
 Publish the package config file and migrations to your application. Run these commands inside your terminal.
 
-    php artisan vendor:publish --provider="Bican\Roles\RolesServiceProvider" --tag=config
-    php artisan vendor:publish --provider="Bican\Roles\RolesServiceProvider" --tag=migrations
+    php artisan vendor:publish --provider="Reno\Roles\RolesServiceProvider" --tag=config
+    php artisan vendor:publish --provider="Reno\Roles\RolesServiceProvider" --tag=migrations
 
 And also run migrations.
 
@@ -87,8 +81,8 @@ And also run migrations.
 Include `HasRoleAndPermission` trait and also implement `HasRoleAndPermission` contract inside your `User` model.
 
 ```php
-use Bican\Roles\Traits\HasRoleAndPermission;
-use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
+use Reno\Roles\Traits\HasRoleAndPermission;
+use Reno\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract, HasRoleAndPermissionContract
 {
@@ -102,7 +96,7 @@ And that's it!
 ### Creating Roles
 
 ```php
-use Bican\Roles\Models\Role;
+use Reno\Roles\Models\Role;
 
 $adminRole = Role::create([
     'name' => 'Admin',
@@ -157,7 +151,7 @@ if ($user->isAdmin()) {
 And of course, there is a way to check for multiple roles:
 
 ```php
-if ($user->is('admin|moderator')) { 
+if ($user->is('admin|moderator')) {
     /*
     | Or alternatively:
     | $user->is('admin, moderator'), $user->is(['admin', 'moderator']),
@@ -181,7 +175,7 @@ if ($user->is('admin|moderator', true)) {
 ### Levels
 
 When you are creating roles, there is optional parameter `level`. It is set to `1` by default, but you can overwrite it and then you can do something like this:
- 
+
 ```php
 if ($user->level() > 4) {
     //
@@ -197,7 +191,7 @@ if ($user->level() > 4) {
 It's very simple thanks to `Permission` model.
 
 ```php
-use Bican\Roles\Models\Permission;
+use Reno\Roles\Models\Permission;
 
 $createUsersPermission = Permission::create([
     'name' => 'Create users',
@@ -217,7 +211,7 @@ You can attach permissions to a role or directly to a specific user (and of cour
 
 ```php
 use App\User;
-use Bican\Roles\Models\Role;
+use Reno\Roles\Models\Role;
 
 $role = Role::find($roleId);
 $role->attachPermission($createUsersPermission); // permission attached to a role
@@ -264,7 +258,7 @@ Let's say you have an article and you want to edit it. This article belongs to a
 
 ```php
 use App\Article;
-use Bican\Roles\Models\Permission;
+use Reno\Roles\Models\Permission;
 
 $editArticlesPermission = Permission::create([
     'name' => 'Edit articles',
@@ -331,9 +325,9 @@ protected $routeMiddleware = [
     'auth' => \App\Http\Middleware\Authenticate::class,
     'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
     'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'role' => \Bican\Roles\Middleware\VerifyRole::class,
-    'permission' => \Bican\Roles\Middleware\VerifyPermission::class,
-    'level' => \Bican\Roles\Middleware\VerifyLevel::class,
+    'role' => \Reno\Roles\Middleware\VerifyRole::class,
+    'permission' => \Reno\Roles\Middleware\VerifyPermission::class,
+    'level' => \Reno\Roles\Middleware\VerifyLevel::class,
 ];
 ```
 
@@ -359,7 +353,7 @@ $router->get('/example', [
 ]);
 ```
 
-It throws `\Bican\Roles\Exceptions\RoleDeniedException`, `\Bican\Roles\Exceptions\PermissionDeniedException` or `\Bican\Roles\Exceptions\LevelDeniedException` exceptions if it goes wrong.
+It throws `\Reno\Roles\Exceptions\RoleDeniedException`, `\Reno\Roles\Exceptions\PermissionDeniedException` or `\Reno\Roles\Exceptions\LevelDeniedException` exceptions if it goes wrong.
 
 You can catch these exceptions inside `app/Exceptions/Handler.php` file and do whatever you want.
 
@@ -373,7 +367,7 @@ You can catch these exceptions inside `app/Exceptions/Handler.php` file and do w
  */
 public function render($request, Exception $e)
 {
-    if ($e instanceof \Bican\Roles\Exceptions\RoleDeniedException) {
+    if ($e instanceof \Reno\Roles\Exceptions\RoleDeniedException) {
         // you can for example flash message, redirect...
         return redirect()->back();
     }
@@ -388,7 +382,7 @@ You can change connection for models, slug separator, models path and there is a
 
 ## More Information
 
-For more information, please have a look at [HasRoleAndPermission](https://github.com/romanbican/roles/blob/master/src/Bican/Roles/Contracts/HasRoleAndPermission.php) contract.
+For more information, please have a look at [HasRoleAndPermission](https://github.com/rjp2525/roles/blob/master/src/Reno/Roles/Contracts/HasRoleAndPermission.php) contract.
 
 ## License
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bican\Roles\Traits;
+namespace Reno\Roles\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -108,7 +108,7 @@ trait HasRoleAndPermission
     /**
      * Attach role to a user.
      *
-     * @param int|\Bican\Roles\Models\Role $role
+     * @param int|\Reno\Roles\Models\Role $role
      * @return null|bool
      */
     public function attachRole($role)
@@ -119,7 +119,7 @@ trait HasRoleAndPermission
     /**
      * Detach role from a user.
      *
-     * @param int|\Bican\Roles\Models\Role $role
+     * @param int|\Reno\Roles\Models\Role $role
      * @return int
      */
     public function detachRole($role)
@@ -298,7 +298,7 @@ trait HasRoleAndPermission
     /**
      * Attach permission to a user.
      *
-     * @param int|\Bican\Roles\Models\Permission $permission
+     * @param int|\Reno\Roles\Models\Permission $permission
      * @return null|bool
      */
     public function attachPermission($permission)
@@ -309,7 +309,7 @@ trait HasRoleAndPermission
     /**
      * Detach permission from a user.
      *
-     * @param int|\Bican\Roles\Models\Permission $permission
+     * @param int|\Reno\Roles\Models\Permission $permission
      * @return int
      */
     public function detachPermission($permission)
@@ -327,7 +327,7 @@ trait HasRoleAndPermission
     public function detachAllPermissions()
     {
         $this->permissions = null;
-        
+
         return $this->userPermissions()->detach();
     }
 

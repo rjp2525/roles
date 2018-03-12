@@ -1,11 +1,11 @@
 <?php
 
-namespace Bican\Roles\Models;
+namespace Reno\Roles\Models;
 
-use Bican\Roles\Traits\Slugable;
+use Reno\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
-use Bican\Roles\Traits\RoleHasRelations;
-use Bican\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
+use Reno\Roles\Traits\RoleHasRelations;
+use Reno\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 
 class Role extends Model implements RoleHasRelationsContract
 {

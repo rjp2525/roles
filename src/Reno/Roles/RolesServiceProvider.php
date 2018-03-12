@@ -1,6 +1,6 @@
 <?php
 
-namespace Bican\Roles;
+namespace Reno\Roles;
 
 use Illuminate\Support\ServiceProvider;
 
